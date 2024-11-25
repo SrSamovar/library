@@ -57,11 +57,13 @@ class Library:
         return
 
     def search_book(self, query: str):  # поиск определенной книги
+        results = []
         for book in self.books:
             if (query.lower() == book.title.lower() or
                     query.lower() == book.author.lower() or
                     query == str(book.year)):
-                return book
+                results.append(book)
+        return results
 
     def status_book(self, book_id: int, new_status: str):  # изменение статуса
         for book in self.books:
@@ -113,23 +115,22 @@ def console():
             library.delete_book(book_id)
 
         elif choise == '3':
-            query = input("Введите название книги, имя автора или год издания:")
+            query = input("Введите название, автора или год для поиска: ")
             results = library.search_book(query)
             if results:
-                for result in results:
+                for book in results:
                     print(
-                        f"id: {result.id}, Название: '{result.title}',"
-                        f" Автор: '{result.author}', Год: {result.year},"
-                        f" Статус: {result.status}")
-                else:
-                    print("Книги не найдены.")
+                        f"id: {book.id}, Название: '{book.title}', Автор: '{book.author}',"
+                        f" Год: {book.year}, Статус: {book.status}")
+            else:
+                print("Книги не найдены.")
 
         elif choise == '4':
             library.all_book()
 
         elif choise == '5':
             id_book = int(input("Введите номер книги:"))
-            status = input("Введите новый статус")
+            status = input("Введите новый статус:")
             library.status_book(id_book, status)
 
 
