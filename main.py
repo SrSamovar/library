@@ -40,7 +40,11 @@ class Library:
         return []
 
     def add_book(self, title: str, author: str, year: int):  # добавление книги в файл
-        book_id = len(self.books) + 1
+        book_id = 0
+        if len(self.books) == 0:
+            book_id = 1
+        else:
+            book_id = self.books[-1].id + 1
         new_book = Book(book_id, title, author, year)
         self.books.append(new_book)
         self.save_book()
