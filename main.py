@@ -1,5 +1,13 @@
 import json
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG, filename='book.log',
+                    filemode='w', encoding='windows-1251')
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+logger = logging.getLogger()
+logger.addHandler(console_handler)
 
 
 class Book:
@@ -48,16 +56,16 @@ class Library:
         new_book = Book(book_id, title, author, year)
         self.books.append(new_book)
         self.save_book()
-        print(f"Книга {title} добавлена в библиотеку")
+        logging.info(f"Книга {title} добавлена в библиотеку")
 
     def delete_book(self, book_id: int):  # удаление книги
         for book in self.books:
             if book_id == book.id:
                 self.books.remove(book)
                 self.save_book()
-                print(f"Книга с номером {book_id} удалена")
+                logging.info(f'Книга с номером {book_id} удалена')
                 return
-        print(f"Книга с номером {book_id} не найдена")
+        logging.info(f"Книга с номером {book_id} не найдена")
         return
 
     def search_book(self, query: str):  # поиск определенной книги
@@ -75,17 +83,17 @@ class Library:
                 if new_status in ['В наличии', 'Нет в наличии']:
                     book.status == new_status
                     self.save_book()
-                    print(f'Статус книги под номером {book_id} изменён на {new_status}')
+                    logging.info(f'Статус книги под номером {book_id} изменён на {new_status}')
                     return
                 else:
-                    print(f"Доступны статусы: 'В наличии', 'Нет в наличии'")
+                    logging.info(f"Доступны статусы: 'В наличии', 'Нет в наличии'")
                     return
-        print(f"Книга под номером {book_id} не найдена")
+        logging.info(f"Книга под номером {book_id} не найдена")
         return
 
     def all_book(self):  # показ всех харнящихся книг
         if not self.books:
-            print(f"В библиотеке нет книг")
+            logging.info(f"В библиотеке нет книг")
             return
         else:
             for book in self.books:
@@ -99,7 +107,7 @@ def console():
     library = Library()
 
     while True:
-        print("Меню")
+        print("Меню:")
         print("1: Добавить книгу")
         print("2: Удалить книгу")
         print("3: Найти книгу")
@@ -127,7 +135,7 @@ def console():
                         f"id: {book.id}, Название: '{book.title}', Автор: '{book.author}',"
                         f" Год: {book.year}, Статус: {book.status}")
             else:
-                print("Книги не найдены.")
+                logging.info("Книги не найдены.")
 
         elif choise == '4':
             library.all_book()
